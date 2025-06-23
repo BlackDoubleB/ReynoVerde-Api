@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebApiReynoVerde.Entidades;
 
@@ -13,6 +14,7 @@ namespace WebApiReynoVerde
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Producto>(entity => {
                 entity.ToTable("Producto");
                 entity.HasKey(p => p.Id);

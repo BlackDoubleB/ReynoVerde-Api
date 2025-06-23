@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using WebApiReynoVerde;
+using WebApiReynoVerde.Repositorios;
+using WebApiReynoVerde.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,31 +16,29 @@ builder.Services.AddOpenApi();
 builder.Services.AddAutoMapper(typeof(Program));
 
 //Configuración de la base de datos y el contexto
-builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
-opciones.UseSqlServer("name=DefaultConnection"));
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+options.UseSqlServer("name=DefaultConnection"));
 
 //Configuracion de Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(opciones =>
+builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
 {
-    opciones.SignIn.RequireConfirmedAccount = false;
-}).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+    options.SignIn.RequireConfirmedEmail = false;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders(); // Añadir esto es buena práctica, si no lo tienes
 
-//JWT
-var jwtKey = builder.Configuration["JwtKey"]; 
-var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opciones =>
-    {
-        opciones.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = key
-        };
-    });
+// Configuración explícita de las opciones de la cookie de autenticación de Identity
+// Esto es lo que faltaba para SameSite=None y Secure
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None; // Permite que la cookie se envíe en solicitudes cross-site
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ¡Obligatorio con SameSite=None! Solo HTTPS.
+    options.Cookie.IsEssential = true; // Marca la cookie como esencial
+    // Opcional: puedes ajustar el dominio si es necesario para subdominios
+    // options.Cookie.Domain = ".tudominio.com";
+});
 
 //Configuración de CORS
 var OrigenesPermitidos = builder.Configuration.GetValue<string>("OrigenesPermitidos")!.Split(",");
@@ -49,16 +46,16 @@ builder.Services.AddCors(opciones =>
 {
     opciones.AddDefaultPolicy(politica =>
     {
-        politica.WithOrigins(OrigenesPermitidos)
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-
+        politica.WithOrigins(OrigenesPermitidos).AllowCredentials().AllowAnyHeader().AllowAnyMethod();
     });
 }
 );
 
-var app = builder.Build(); 
+builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
+builder.Services.AddScoped<ICategoriaServicio, CategoriaServicio>();
 
+var app = builder.Build();
+app.MapIdentityApi<IdentityUser>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
