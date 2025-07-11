@@ -1,6 +1,6 @@
 ﻿namespace WebApiReynoVerde.DTO
 {
-    public class ProductoCrearDTO
+    public class ProductoConsultarDTO
     {
     }
 }

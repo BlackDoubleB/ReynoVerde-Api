@@ -17,6 +17,7 @@ namespace WebApiReynoVerde.Controllers
             _categoriaServicio = categoriaServicio;
         }
 
+
         [HttpGet("{id:guid}", Name = "ObtenerCategoriaPorId")] // <<-- Este es el nombre de la ruta
         [Authorize]
         public async Task<ActionResult<CategoriaDTO>> ObtenerCategoriaPorId(Guid id)

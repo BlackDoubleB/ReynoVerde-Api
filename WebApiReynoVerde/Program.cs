@@ -36,6 +36,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SameSite = SameSiteMode.None; // Permite que la cookie se envíe en solicitudes cross-site
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ¡Obligatorio con SameSite=None! Solo HTTPS.
     options.Cookie.IsEssential = true; // Marca la cookie como esencial
+    options.Cookie.HttpOnly = true;
     // Opcional: puedes ajustar el dominio si es necesario para subdominios
     // options.Cookie.Domain = ".tudominio.com";
 });
@@ -53,7 +54,8 @@ builder.Services.AddCors(opciones =>
 
 builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<ICategoriaServicio, CategoriaServicio>();
-
+builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
+builder.Services.AddScoped<IProductoServicio, ProductoServicio>();
 var app = builder.Build();
 app.MapIdentityApi<IdentityUser>();
 // Configure the HTTP request pipeline.

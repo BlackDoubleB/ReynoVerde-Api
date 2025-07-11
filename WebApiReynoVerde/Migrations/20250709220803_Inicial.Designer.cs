@@ -12,7 +12,7 @@ using WebApiReynoVerde;
 namespace WebApiReynoVerde.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250615024457_Inicial")]
+    [Migration("20250709220803_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -227,7 +227,8 @@ namespace WebApiReynoVerde.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("NombreCategoria")
                         .IsRequired()
@@ -235,6 +236,10 @@ namespace WebApiReynoVerde.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NombreCategoria")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Categoria_NombreCategoria");
 
                     b.ToTable("Categoria", (string)null);
                 });
@@ -267,7 +272,8 @@ namespace WebApiReynoVerde.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CategoriaId")
                         .HasColumnType("uniqueidentifier");
@@ -293,6 +299,10 @@ namespace WebApiReynoVerde.Migrations
 
                     b.HasIndex("CategoriaId");
 
+                    b.HasIndex("ProductoNombre")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Producto_NombreProducto");
+
                     b.ToTable("Producto", (string)null);
                 });
 
@@ -300,7 +310,8 @@ namespace WebApiReynoVerde.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
@@ -325,7 +336,8 @@ namespace WebApiReynoVerde.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<DateTime>("FechaRegistro")
                         .ValueGeneratedOnAdd()

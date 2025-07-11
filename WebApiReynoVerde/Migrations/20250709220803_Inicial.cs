@@ -54,7 +54,7 @@ namespace WebApiReynoVerde.Migrations
                 name: "Categoria",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     NombreCategoria = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -172,7 +172,7 @@ namespace WebApiReynoVerde.Migrations
                 name: "Venta",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Metodo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
@@ -192,7 +192,7 @@ namespace WebApiReynoVerde.Migrations
                 name: "Producto",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductoNombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ImagenUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -240,7 +240,7 @@ namespace WebApiReynoVerde.Migrations
                 name: "Stock",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     ProductoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
@@ -296,6 +296,12 @@ namespace WebApiReynoVerde.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Categoria_NombreCategoria",
+                table: "Categoria",
+                column: "NombreCategoria",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DetalleVentaProducto_ProductoId",
                 table: "DetalleVentaProducto",
                 column: "ProductoId");
@@ -309,6 +315,12 @@ namespace WebApiReynoVerde.Migrations
                 name: "IX_Producto_CategoriaId",
                 table: "Producto",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Producto_NombreProducto",
+                table: "Producto",
+                column: "ProductoNombre",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stock_ProductoId",
