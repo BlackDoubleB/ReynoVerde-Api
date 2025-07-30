@@ -6,8 +6,8 @@ namespace WebApiReynoVerde.Servicios
     public interface IProductoServicio
     {
       
-        Task<List<ProductoDTO>> ObtenerTodoProducto();
-        Task<List<ProductoDTO>> ObtenerProductosPorCategoria(string categoria);
-        Task<List<ProductoDTO>> ObtenerProductosPorNombre(string nombre);
+       
+        Task<List<ProductoDTO>> ObtenerProductosFiltrados(List<string> categoria = null, string? nombre = null);
+        Task<List<ProductoDTO>> ObtenerProductosPrincipales();
     }
 }

@@ -51,17 +51,32 @@ namespace WebApiReynoVerde.Servicios
             { 
             return null; // O lanzar una excepción si prefieres
             }
-            var categoriaDTO = new CategoriaDTO
+            var categoriasDTO = new CategoriaDTO
             {
                 Id = categoriaEntidad.Id,
                 NombreCategoria = categoriaEntidad.NombreCategoria
             };
-            return categoriaDTO;
+            return categoriasDTO;
         }
 
-        public Task<List<CategoriaDTO>> ObtenerTodaCategoria()
+        public async Task<List<CategoriaDTO>> ObtenerTodaCategoria()
         {
-            throw new NotImplementedException();
+            var categoriaEntidad = await _categoriaRepositorio.ObtenerTodaCategoria();
+
+            if (categoriaEntidad == null || !categoriaEntidad.Any())
+            {
+                return new List<CategoriaDTO>(); // Lista vacía si no hay datos
+            }
+
+            var categoriasDTO = categoriaEntidad.Select(c => new CategoriaDTO
+            {
+                Id = c.Id,
+                NombreCategoria = c.NombreCategoria
+            }).ToList();
+
+            return categoriasDTO;
+
+
         }
     }
 }

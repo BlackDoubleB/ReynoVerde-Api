@@ -1,4 +1,5 @@
-﻿using WebApiReynoVerde.Entidades;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApiReynoVerde.Entidades;
 
 namespace WebApiReynoVerde.Repositorios
 {
@@ -44,9 +45,9 @@ namespace WebApiReynoVerde.Repositorios
             return await _context.Categoria.FindAsync(id);
         }
 
-        public Task<List<Categoria>> ObtenerTodaCategoria()
+        public async Task<List<Categoria>> ObtenerTodaCategoria()
         {
-            throw new NotImplementedException();
+            return await _context.Categoria.ToListAsync();
         }
     }
 }

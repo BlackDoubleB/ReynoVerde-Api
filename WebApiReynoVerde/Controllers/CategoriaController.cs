@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApiReynoVerde.DTO;
 using WebApiReynoVerde.Servicios;
@@ -11,10 +10,12 @@ namespace WebApiReynoVerde.Controllers
     public class CategoriaController : ControllerBase
     {
         private readonly ICategoriaServicio _categoriaServicio;
+        private readonly ICategoriaProductoInicioServicio _categoriaProductoInicioServicio;
 
-        public CategoriaController(ICategoriaServicio categoriaServicio)
+        public CategoriaController(ICategoriaServicio categoriaServicio, ICategoriaProductoInicioServicio categoriaProductoInicioServicio)
         {
             _categoriaServicio = categoriaServicio;
+            _categoriaProductoInicioServicio = categoriaProductoInicioServicio;
         }
 
 
@@ -24,7 +25,7 @@ namespace WebApiReynoVerde.Controllers
         {
             var categoria = await _categoriaServicio.ObtenerCategoriaPorId(id);
             if (categoria is null)
-            { 
+            {
                 return NotFound(); // Retorna 404 si no se encuentra la categoría
             }
             return Ok(categoria); // Retorna 200 OK con la categoría encontrada
@@ -36,6 +37,32 @@ namespace WebApiReynoVerde.Controllers
         {
             var nuevaCategoria = await _categoriaServicio.CrearCategoria(categoriaCrearDTO);
             return CreatedAtRoute("ObtenerCategoriaPorId", new { id = nuevaCategoria.Id }, nuevaCategoria);
+        }
+
+
+        [HttpGet("ObtenerTodaCategoria")]
+        [Authorize]
+        public async Task<IActionResult> ObtenerTodaCategoria()
+        {
+            var categorias = await _categoriaServicio.ObtenerTodaCategoria();
+
+            if (categorias == null || !categorias.Any())
+            {
+                return NotFound("No se encontraron categorías."); // O puedes usar NoContent() si prefieres
+            }
+
+            return Ok(categorias);
+        }
+
+        [HttpGet("ObtenerCategoriaProductoInicio")]
+        [Authorize]
+        public async Task<IActionResult> ObtenerCategoriaProductoInicio()
+        {
+            var categoriasProducto = await _categoriaProductoInicioServicio.ObtenerTodaCategoriaProductoInicio();
+            if (categoriasProducto == null || !categoriasProducto.Any()) { 
+            return NotFound("No se encontraron categorías de productos para inicio.");
+            }
+            return Ok(categoriasProducto);
         }
     }
 }

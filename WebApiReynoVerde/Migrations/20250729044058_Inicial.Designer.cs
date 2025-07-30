@@ -12,7 +12,7 @@ using WebApiReynoVerde;
 namespace WebApiReynoVerde.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250709220803_Inicial")]
+    [Migration("20250729044058_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -229,6 +229,11 @@ namespace WebApiReynoVerde.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
+
+                    b.Property<string>("DescripcionCategoria")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("NombreCategoria")
                         .IsRequired()

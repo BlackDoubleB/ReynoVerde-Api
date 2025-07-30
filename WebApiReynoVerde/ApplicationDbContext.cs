@@ -36,7 +36,9 @@ namespace WebApiReynoVerde
                 entity.HasKey(c => c.Id);
                 entity.Property(c => c.Id).HasDefaultValueSql("NEWID()");
                 entity.Property(c => c.NombreCategoria).IsRequired().HasMaxLength(50);
+                entity.Property(c => c.DescripcionCategoria).IsRequired().HasMaxLength(500); 
                 entity.HasIndex(c => c.NombreCategoria).IsUnique().HasDatabaseName("IX_Categoria_NombreCategoria");
+               
             });
 
             modelBuilder.Entity<Stock>(entity => {

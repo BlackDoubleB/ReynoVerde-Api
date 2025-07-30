@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using WebApiReynoVerde.Entidades;
 
 namespace WebApiReynoVerde.Repositorios
@@ -12,22 +13,35 @@ namespace WebApiReynoVerde.Repositorios
             _context = context;
         }
 
-        public Task<List<Producto>> ObtenerProductosPorNombre(string nombre)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Producto>> ObtenerProductosPorCategoria(string categoria)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Producto>> ObtenerTodoProducto()
+        public async Task<List<Producto>> ObtenerProductosPrincipales()
         {
             return await _context.Producto
-                                           .Include(p => p.Categoria)
-                                           .Include(p => p.Stock)
-                                           .ToListAsync();
+                        .Include(p => p.Categoria)
+                        .GroupBy(p => p.CategoriaId)
+                        .Select(g => g.First()) 
+                        .Take(3)
+                        .ToListAsync();
         }
+
+        public async Task<List<Producto>> ObtenerProductosFiltrados(List<string>? categorias = null, string? nombre = null)
+        {
+            var query = _context.Producto
+                     .Include(p => p.Categoria)
+                     .AsQueryable();
+
+            if (categorias != null && categorias.Any())
+            {
+                query = query.Where(p => categorias.Contains(p.Categoria.NombreCategoria));
+            }
+
+            if (!string.IsNullOrWhiteSpace(nombre))
+            {
+                query = query.Where(p => p.ProductoNombre.Contains(nombre));
+            }
+
+            return await query.ToListAsync();
+        }
+
+
     }
 }

@@ -56,6 +56,9 @@ builder.Services.AddScoped<ICategoriaRepositorio, CategoriaRepositorio>();
 builder.Services.AddScoped<ICategoriaServicio, CategoriaServicio>();
 builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 builder.Services.AddScoped<IProductoServicio, ProductoServicio>();
+builder.Services.AddScoped<ICategoriaProductoInicioRepositorio, CategoriaProductoInicioRepositorio >();
+builder.Services.AddScoped<ICategoriaProductoInicioServicio, CategoriaProductoInicioServicio>();
+
 var app = builder.Build();
 app.MapIdentityApi<IdentityUser>();
 // Configure the HTTP request pipeline.

@@ -227,6 +227,11 @@ namespace WebApiReynoVerde.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("DescripcionCategoria")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("NombreCategoria")
                         .IsRequired()
                         .HasMaxLength(50)
