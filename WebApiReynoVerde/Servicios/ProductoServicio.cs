@@ -11,6 +11,23 @@ namespace WebApiReynoVerde.Servicios
             _productoRepositorio = productoRepositorio;
         }
 
+        public async Task<ProductoCategoriaDetalleDTO> ObtenerProductoPorId(Guid id)
+        {
+            var productoEntidad = await _productoRepositorio.ObtenerProductoPorId(id);
+            if (productoEntidad == null) return new ProductoCategoriaDetalleDTO();
+            var productoDTO = new ProductoCategoriaDetalleDTO
+            {
+                Id = productoEntidad.Id,
+                ProductoNombre = productoEntidad.ProductoNombre,
+                ImagenUrl = productoEntidad.ImagenUrl,
+                Precio = productoEntidad.Precio,
+                ProductoDescripcion = productoEntidad.ProductoDescripcion,
+                CategoriaNombre = productoEntidad.Categoria?.NombreCategoria,
+                CantidadStock = productoEntidad.Stock?.Cantidad ?? 0
+            };
+
+            return productoDTO;
+        }
 
         public async Task<List<ProductoDTO>> ObtenerProductosFiltrados(List<string>? categorias = null, string? nombre = null)
         {

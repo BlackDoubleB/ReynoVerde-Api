@@ -42,6 +42,13 @@ namespace WebApiReynoVerde.Repositorios
             return await query.ToListAsync();
         }
 
+        public async Task<Producto> ObtenerProductoPorId(Guid id)
+        {
+           var query = _context.Producto.Include(p => p.Categoria)
+                        .Include(p => p.Stock)
+                        .AsQueryable();
 
+            return await query.FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

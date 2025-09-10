@@ -6,6 +6,7 @@ namespace WebApiReynoVerde.Repositorios
     {
         Task<List<Producto>> ObtenerProductosFiltrados(List<string> categoria = null, string? nombre = null);
         Task<List<Producto>> ObtenerProductosPrincipales();
-        
+        Task<Producto> ObtenerProductoPorId(Guid id);
+
     }
 }

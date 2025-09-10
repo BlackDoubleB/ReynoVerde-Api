@@ -6,6 +6,6 @@ namespace WebApiReynoVerde.Servicios
     {
         Task<List<CategoriaDTO>> ObtenerTodaCategoria();
         Task<CategoriaDTO> ObtenerCategoriaPorId(Guid id);
-        Task<CategoriaDTO> CrearCategoria(CategoriaCrearDTO creacionDTO);
+        
     }
 }

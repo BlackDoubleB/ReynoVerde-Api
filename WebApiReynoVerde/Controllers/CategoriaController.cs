@@ -19,16 +19,16 @@ namespace WebApiReynoVerde.Controllers
         }
 
 
-        [HttpGet("{id:guid}", Name = "ObtenerCategoriaPorId")] // <<-- Este es el nombre de la ruta
+        [HttpGet("{id:guid}", Name = "ObtenerCategoriaPorId")] 
         [Authorize]
         public async Task<ActionResult<CategoriaDTO>> ObtenerCategoriaPorId(Guid id)
         {
             var categoria = await _categoriaServicio.ObtenerCategoriaPorId(id);
             if (categoria is null)
             {
-                return NotFound(); // Retorna 404 si no se encuentra la categoría
+                return NotFound(); 
             }
-            return Ok(categoria); // Retorna 200 OK con la categoría encontrada
+            return Ok(categoria); 
         }
 
         [HttpPost("crearcategoria")]
@@ -48,7 +48,7 @@ namespace WebApiReynoVerde.Controllers
 
             if (categorias == null || !categorias.Any())
             {
-                return NotFound("No se encontraron categorías."); // O puedes usar NoContent() si prefieres
+                return NotFound("No se encontraron categorías.");
             }
 
             return Ok(categorias);

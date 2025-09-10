@@ -6,7 +6,7 @@ using WebApiReynoVerde.Repositorios;
 using WebApiReynoVerde.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -26,19 +26,14 @@ builder.Services.AddIdentityApiEndpoints<IdentityUser>(options =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders(); // Añadir esto es buena práctica, si no lo tienes
+.AddDefaultTokenProviders();
 
-
-// Configuración explícita de las opciones de la cookie de autenticación de Identity
-// Esto es lo que faltaba para SameSite=None y Secure
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.None; // Permite que la cookie se envíe en solicitudes cross-site
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ¡Obligatorio con SameSite=None! Solo HTTPS.
-    options.Cookie.IsEssential = true; // Marca la cookie como esencial
+    options.Cookie.SameSite = SameSiteMode.None; 
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; 
+    options.Cookie.IsEssential = true; 
     options.Cookie.HttpOnly = true;
-    // Opcional: puedes ajustar el dominio si es necesario para subdominios
-    // options.Cookie.Domain = ".tudominio.com";
 });
 
 //Configuración de CORS
@@ -61,15 +56,15 @@ builder.Services.AddScoped<ICategoriaProductoInicioServicio, CategoriaProductoIn
 
 var app = builder.Build();
 app.MapIdentityApi<IdentityUser>();
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+
+  if (app.Environment.IsDevelopment())
+   {
+        app.MapOpenApi();
+   }
 
 app.UseHttpsRedirection();
 app.UseCors();
-app.UseAuthentication(); //Permite obtener la data del usuario autenticado
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

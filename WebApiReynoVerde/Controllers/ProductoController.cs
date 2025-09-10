@@ -26,9 +26,9 @@ namespace WebApiReynoVerde.Controllers
             var productos = await _productoServicio.ObtenerProductosFiltrados(categoria, nombre);
             if (productos is null || !productos.Any())
             {
-                return NotFound(); // Retorna 404 si no se encuentran productos
+                return NotFound(); 
             }
-            return Ok(productos); // Retorna 200 OK con la lista de productos encontrados
+            return Ok(productos);
         }
 
         [HttpGet("obtenerProductosPrincipales")]
@@ -38,9 +38,20 @@ namespace WebApiReynoVerde.Controllers
             var productos = await _productoServicio.ObtenerProductosPrincipales();
             if (productos is null || !productos.Any())
             {
-                return NotFound(); // Retorna 404 si no se encuentran productos
+                return NotFound(); 
             }
-            return Ok(productos); // Retorna 200 OK con la lista de productos encontrados
+            return Ok(productos); 
+        }
+        [HttpGet("obtenerProductoPorId/{id}")]
+        [Authorize]
+        public async Task<ActionResult<ProductoDTO>> ObtenerProductoPorId(Guid id)
+        {
+            var producto = await _productoServicio.ObtenerProductoPorId(id);
+            if (producto is null)
+            {
+                return NotFound(); 
+            }
+            return Ok(producto); 
         }
 
     }

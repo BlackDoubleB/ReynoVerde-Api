@@ -7,9 +7,6 @@ namespace WebApiReynoVerde.Repositorios
     {
         Task<List<Categoria>> ObtenerTodaCategoria();
         Task<Categoria> ObtenerCategoriaPorId(Guid id);
-        Task<bool> Crear(Categoria categoria);
-        Task Actualizar(Categoria categoria);
-        Task Eliminar(Guid Id);
        
     }
 }

@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public Guid CategoriaId { get; set; }
         public string ProductoNombre { get; set; }
+        public string ProductoDescripcion { get; set; }
         public string ImagenUrl { get; set; }
         public float Precio { get; set; }
         public DateTime FechaRegistro { get; set; }

@@ -20,13 +20,14 @@ namespace WebApiReynoVerde
                 entity.HasKey(p => p.Id);
                 entity.Property(p => p.Id).HasDefaultValueSql("NEWID()");
                 entity.Property(p => p.ProductoNombre).IsRequired().HasMaxLength(100);
+                entity.Property(p=> p.ProductoDescripcion).IsRequired().HasMaxLength(2000).HasDefaultValue("Defauly");
                 entity.Property(p => p.ImagenUrl).IsRequired();
                 entity.Property(p => p.Precio).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(p => p.FechaRegistro).IsRequired().HasDefaultValueSql("GETDATE()");
                 
-                entity.HasOne(p => p.Categoria)           // Producto tiene UNA Categoría
-                .WithMany(c => c.Productos)         // Categoría tiene MUCHOS Productos
-                .HasForeignKey(p => p.CategoriaId); // Clave foránea está en Producto
+                entity.HasOne(p => p.Categoria)           
+                .WithMany(c => c.Productos)         
+                .HasForeignKey(p => p.CategoriaId);
 
                 entity.HasIndex(p => p.ProductoNombre).IsUnique().HasDatabaseName("IX_Producto_NombreProducto");
             });
@@ -61,8 +62,8 @@ namespace WebApiReynoVerde
                 entity.Property(v => v.FechaRegistro).IsRequired().HasDefaultValueSql("GETDATE()");
                 entity.Property(v => v.Total).IsRequired().HasColumnType("decimal(18,2)");
                 entity.HasOne(v => v.Usuario)
-                      .WithMany() // Usuario tiene muchas Ventas
-                      .HasForeignKey(v => v.UsuarioId); // Clave foránea en Venta
+                      .WithMany() 
+                      .HasForeignKey(v => v.UsuarioId); 
             });
             modelBuilder.Entity<DetalleVentaProducto>(entity =>
             {
